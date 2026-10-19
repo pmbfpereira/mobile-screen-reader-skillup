@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile SR Skill-up 2 — Interaction & Focus</title>
+<style>
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color: #171717;
+  background: #f4f5f7;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #f4f5f7;
+}
+.app {
+  max-width: 480px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: white;
+  padding: 20px 18px 48px;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+h1, h2, h3 { margin: 0; }
+h1 { font-size: 1.75rem; line-height: 1.2; }
+h2 { font-size: 1.15rem; margin-top: 28px; margin-bottom: 10px; }
+p { line-height: 1.45; }
+.card, .panel {
+  border: 1px solid #d9dde3;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 10px 0;
+  background: #fff;
+}
+.account-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.muted { color: #61656c; }
+.amount { font-weight: 700; font-size: 1.15rem; }
+button, input, select {
+  font: inherit;
+}
+button {
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid #888;
+  background: #fff;
+  padding: 10px 14px;
+}
+button.primary {
+  width: 100%;
+  border: 0;
+  background: #111;
+  color: white;
+  font-weight: 700;
+  margin-top: 14px;
+}
+button.icon {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 1.35rem;
+}
+.field {
+  margin: 16px 0;
+}
+label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid #8b8f96;
+  border-radius: 10px;
+}
+.notice {
+  border-radius: 12px;
+  padding: 12px;
+  margin: 12px 0;
+  background: #f1f2f4;
+}
+.error {
+  color: #8a1212;
+  margin-top: 6px;
+}
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 8px 0 22px;
+}
+.tabs button[aria-pressed="true"] {
+  background: #111;
+  color: #fff;
+}
+.demo-note {
+  font-size: .9rem;
+  color: #52565d;
+  margin: 8px 0 18px;
+}
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: .78rem;
+  background: #eceef2;
+}
+.hidden { display: none !important; }
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  display: flex;
+  align-items: end;
+  justify-content: center;
+}
+.sheet {
+  width: min(480px, 100%);
+  background: white;
+  border-radius: 22px 22px 0 0;
+  padding: 20px 18px 28px;
+  max-height: 75vh;
+  overflow: auto;
+}
+.sheet .option {
+  width: 100%;
+  text-align: left;
+  margin: 6px 0;
+}
+.fake-link {
+  color: #1849a9;
+  text-decoration: underline;
+  cursor: pointer;
+}
+hr {
+  border: 0;
+  border-top: 1px solid #e3e6ea;
+  margin: 24px 0;
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <div class="topbar">
+    <div>
+      <h1>Transfer money</h1>
+      <p class="muted" style="margin:4px 0 0">Interaction & focus exercise</p>
+    </div>
+  </div>
+
+  <div class="tabs" aria-label="Demo mode">
+    <button id="badTab" aria-pressed="true">Bad example</button>
+    <button id="goodTab" aria-pressed="false">Improved example</button>
+  </div>
+
+  <p class="demo-note">
+    Try the flow using only the screen reader: choose an account, enter an amount, submit the form, and open the terms.
+  </p>
+
+  <section id="badVersion">
+    <div class="field">
+      <div style="font-weight:700;margin-bottom:6px">From account</div>
+      <button id="badAccountBtn" style="width:100%">Choose account</button>
+    </div>
+
+    <div class="field">
+      <div style="font-weight:700;margin-bottom:6px">Amount</div>
+      <input id="badAmount" inputmode="decimal" placeholder="0.00">
+      <div id="badError" class="error hidden">Enter an amount greater than 0.</div>
+    </div>
+
+    <button class="primary" id="badContinue">Continue</button>
+
+    <p style="margin-top:20px">
+      By continuing you accept our
+      <span id="badTerms" class="fake-link">terms and conditions</span>.
+    </p>
+
+    <div id="badSuccess" class="notice hidden">Payment successful.</div>
+  </section>
+
+  <section id="goodVersion" class="hidden">
+    <div class="field">
+      <label for="goodAccountBtn">From account</label>
+      <button id="goodAccountBtn" aria-haspopup="dialog" style="width:100%">Choose account</button>
+    </div>
+
+    <div class="field">
+      <label for="goodAmount">Amount</label>
+      <input id="goodAmount" inputmode="decimal" aria-describedby="goodAmountHint goodError">
+      <div id="goodAmountHint" class="muted">Enter the amount in kroner.</div>
+      <div id="goodError" class="error hidden"></div>
+    </div>
+
+    <button class="primary" id="goodContinue">Continue</button>
+
+    <p style="margin-top:20px">
+      By continuing you accept our
+      <button id="goodTerms" class="fake-link" style="border:0;background:none;padding:0;min-height:auto">terms and conditions</button>.
+    </p>
+
+    <div id="goodSuccess" class="notice hidden" role="status" aria-live="polite">Payment successful.</div>
+
+    <section id="termsPanel" class="panel hidden" tabindex="-1">
+      <h2 id="termsHeading">Terms and conditions</h2>
+      <p>This section represents web content opened from the surrounding app flow.</p>
+      <p>Notice whether you understand that the context changed and whether the heading helps establish where you are.</p>
+      <button id="closeTerms">Back to transfer</button>
+    </section>
+  </section>
+
+  <div id="badSheet" class="sheet-backdrop hidden">
+    <div class="sheet">
+      <div style="font-size:1.2rem;font-weight:800;margin-bottom:10px">Choose account</div>
+      <button class="option" data-value="Everyday account">Everyday account — 12,450 kr</button>
+      <button class="option" data-value="Savings">Savings — 80,000 kr</button>
+      <button id="badCloseSheet">Close</button>
+    </div>
+  </div>
+
+  <div id="goodSheet" class="sheet-backdrop hidden" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="goodSheetTitle">
+      <h2 id="goodSheetTitle" tabindex="-1">Choose account</h2>
+      <button class="option" data-good-value="Everyday account">Everyday account — 12,450 kr</button>
+      <button class="option" data-good-value="Savings">Savings — 80,000 kr</button>
+      <button id="goodCloseSheet">Close</button>
+    </div>
+  </div>
+
+  <hr>
+  <details>
+    <summary>Facilitator notes</summary>
+    <p><strong>Bad example:</strong> visible labels are not programmatically associated, validation appears silently, pseudo-link is not keyboard/screen-reader-native, modal has no dialog semantics, background remains reachable, focus is not managed, success appears silently.</p>
+    <p><strong>Improved example:</strong> associated labels and descriptions, aria-invalid on error, dialog semantics, focus moves into and back out of the dialog, important success update uses a live region, terms transition moves focus to a heading.</p>
+  </details>
+</main>
+
+<script>
+const badTab = document.getElementById('badTab');
+const goodTab = document.getElementById('goodTab');
+const bad = document.getElementById('badVersion');
+const good = document.getElementById('goodVersion');
+const badSheet = document.getElementById('badSheet');
+const goodSheet = document.getElementById('goodSheet');
+
+function setMode(mode) {
+  const isBad = mode === 'bad';
+  bad.classList.toggle('hidden', !isBad);
+  good.classList.toggle('hidden', isBad);
+  badTab.setAttribute('aria-pressed', String(isBad));
+  goodTab.setAttribute('aria-pressed', String(!isBad));
+}
+badTab.addEventListener('click', () => setMode('bad'));
+goodTab.addEventListener('click', () => setMode('good'));
+
+document.getElementById('badAccountBtn').addEventListener('click', () => {
+  badSheet.classList.remove('hidden');
+});
+document.getElementById('badCloseSheet').addEventListener('click', () => {
+  badSheet.classList.add('hidden');
+});
+document.querySelectorAll('[data-value]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.getElementById('badAccountBtn').textContent = btn.dataset.value;
+    badSheet.classList.add('hidden');
+  });
+});
+document.getElementById('badContinue').addEventListener('click', () => {
+  const amount = document.getElementById('badAmount');
+  if (!amount.value || Number(amount.value) <= 0) {
+    document.getElementById('badError').classList.remove('hidden');
+  } else {
+    document.getElementById('badError').classList.add('hidden');
+    document.getElementById('badSuccess').classList.remove('hidden');
+  }
+});
+document.getElementById('badTerms').addEventListener('click', () => {
+  alert('Terms opened visually, but this is intentionally not implemented as a proper control.');
+});
+
+const goodAccountBtn = document.getElementById('goodAccountBtn');
+const goodCloseSheet = document.getElementById('goodCloseSheet');
+
+function openGoodSheet() {
+  good.classList.add('modal-background');
+  good.inert = true;
+  goodSheet.classList.remove('hidden');
+  goodSheet.setAttribute('aria-hidden', 'false');
+  document.getElementById('goodSheetTitle').focus();
+}
+function closeGoodSheet() {
+  goodSheet.classList.add('hidden');
+  goodSheet.setAttribute('aria-hidden', 'true');
+  good.inert = false;
+  good.classList.remove('modal-background');
+  goodAccountBtn.focus();
+}
+goodAccountBtn.addEventListener('click', openGoodSheet);
+goodCloseSheet.addEventListener('click', closeGoodSheet);
+document.querySelectorAll('[data-good-value]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    goodAccountBtn.textContent = btn.dataset.goodValue;
+    closeGoodSheet();
+  });
+});
+
+document.getElementById('goodContinue').addEventListener('click', () => {
+  const amount = document.getElementById('goodAmount');
+  const error = document.getElementById('goodError');
+  const success = document.getElementById('goodSuccess');
+  if (!amount.value || Number(amount.value) <= 0) {
+    error.textContent = 'Enter an amount greater than 0.';
+    error.classList.remove('hidden');
+    amount.setAttribute('aria-invalid', 'true');
+    success.classList.add('hidden');
+    amount.focus();
+  } else {
+    error.textContent = '';
+    error.classList.add('hidden');
+    amount.removeAttribute('aria-invalid');
+    success.classList.remove('hidden');
+  }
+});
+
+const termsPanel = document.getElementById('termsPanel');
+const goodTerms = document.getElementById('goodTerms');
+const closeTerms = document.getElementById('closeTerms');
+
+goodTerms.addEventListener('click', () => {
+  termsPanel.classList.remove('hidden');
+  document.getElementById('termsHeading').focus?.();
+  termsPanel.focus();
+});
+closeTerms.addEventListener('click', () => {
+  termsPanel.classList.add('hidden');
+  goodTerms.focus();
+});
+</script>
+</body>
+</html>

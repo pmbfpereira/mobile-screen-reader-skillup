@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile SR Skill-up 1 — Navigation & Semantics</title>
+<style>
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  color: #171717;
+  background: #f4f5f7;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #f4f5f7;
+}
+.app {
+  max-width: 480px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: white;
+  padding: 20px 18px 48px;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+h1, h2, h3 { margin: 0; }
+h1 { font-size: 1.75rem; line-height: 1.2; }
+h2 { font-size: 1.15rem; margin-top: 28px; margin-bottom: 10px; }
+p { line-height: 1.45; }
+.card, .panel {
+  border: 1px solid #d9dde3;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 10px 0;
+  background: #fff;
+}
+.account-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.muted { color: #61656c; }
+.amount { font-weight: 700; font-size: 1.15rem; }
+button, input, select {
+  font: inherit;
+}
+button {
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid #888;
+  background: #fff;
+  padding: 10px 14px;
+}
+button.primary {
+  width: 100%;
+  border: 0;
+  background: #111;
+  color: white;
+  font-weight: 700;
+  margin-top: 14px;
+}
+button.icon {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 1.35rem;
+}
+.field {
+  margin: 16px 0;
+}
+label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid #8b8f96;
+  border-radius: 10px;
+}
+.notice {
+  border-radius: 12px;
+  padding: 12px;
+  margin: 12px 0;
+  background: #f1f2f4;
+}
+.error {
+  color: #8a1212;
+  margin-top: 6px;
+}
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 8px 0 22px;
+}
+.tabs button[aria-pressed="true"] {
+  background: #111;
+  color: #fff;
+}
+.demo-note {
+  font-size: .9rem;
+  color: #52565d;
+  margin: 8px 0 18px;
+}
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: .78rem;
+  background: #eceef2;
+}
+.hidden { display: none !important; }
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  display: flex;
+  align-items: end;
+  justify-content: center;
+}
+.sheet {
+  width: min(480px, 100%);
+  background: white;
+  border-radius: 22px 22px 0 0;
+  padding: 20px 18px 28px;
+  max-height: 75vh;
+  overflow: auto;
+}
+.sheet .option {
+  width: 100%;
+  text-align: left;
+  margin: 6px 0;
+}
+.fake-link {
+  color: #1849a9;
+  text-decoration: underline;
+  cursor: pointer;
+}
+hr {
+  border: 0;
+  border-top: 1px solid #e3e6ea;
+  margin: 24px 0;
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <div class="topbar">
+    <div>
+      <div id="visualTitle" style="font-size:1.75rem;font-weight:800;line-height:1.2">Accounts</div>
+      <p class="muted" style="margin:4px 0 0">Mobile screen reader exercise</p>
+    </div>
+    <button class="icon" id="profileBtn">👤</button>
+  </div>
+
+  <div class="tabs" aria-label="Demo mode">
+    <button id="badTab" aria-pressed="true">Bad example</button>
+    <button id="goodTab" aria-pressed="false">Improved example</button>
+  </div>
+
+  <p class="demo-note">
+    Try navigating with VoiceOver or TalkBack before switching versions. Notice what gets announced, in what order, and whether controls make sense without looking.
+  </p>
+
+  <section id="badVersion">
+    <div style="font-size:1.15rem;font-weight:700;margin-top:28px;margin-bottom:10px">Your accounts</div>
+
+    <div class="card">
+      <div>Everyday account</div>
+      <div class="muted">Account 1234</div>
+      <div class="amount">12,450 kr</div>
+      <div>›</div>
+    </div>
+
+    <div class="card">
+      <div>Savings</div>
+      <div class="muted">Account 9876</div>
+      <div class="amount">80,000 kr</div>
+      <div>›</div>
+    </div>
+
+    <div style="font-size:1.15rem;font-weight:700;margin-top:28px;margin-bottom:10px">Recent activity</div>
+
+    <div class="card">
+      <div class="account-row">
+        <div>
+          <div>IKEA</div>
+          <div class="muted">Yesterday</div>
+          <div>-649 kr</div>
+          <span class="badge">Completed</span>
+        </div>
+        <button aria-label="More">•••</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="account-row">
+        <div>
+          <div>Electricity bill</div>
+          <div class="muted">Due tomorrow</div>
+          <div>-1,290 kr</div>
+          <span class="badge">!</span>
+        </div>
+        <button aria-label="More">•••</button>
+      </div>
+    </div>
+
+    <div class="notice">
+      <span aria-label="information icon">ℹ️</span>
+      Your new card is on its way.
+    </div>
+  </section>
+
+  <section id="goodVersion" class="hidden">
+    <h1>Accounts</h1>
+
+    <h2>Your accounts</h2>
+
+    <article class="card" tabindex="0"
+      aria-label="Everyday account, account ending 1234, balance 12,450 kroner">
+      <div class="account-row" aria-hidden="true">
+        <div>
+          <div><strong>Everyday account</strong></div>
+          <div class="muted">Account 1234</div>
+        </div>
+        <div class="amount">12,450 kr</div>
+      </div>
+    </article>
+
+    <article class="card" tabindex="0"
+      aria-label="Savings, account ending 9876, balance 80,000 kroner">
+      <div class="account-row" aria-hidden="true">
+        <div>
+          <div><strong>Savings</strong></div>
+          <div class="muted">Account 9876</div>
+        </div>
+        <div class="amount">80,000 kr</div>
+      </div>
+    </article>
+
+    <h2>Recent activity</h2>
+
+    <article class="card">
+      <div class="account-row">
+        <div>
+          <div><strong>IKEA</strong></div>
+          <div class="muted">Yesterday</div>
+          <div>-649 kr</div>
+          <div class="badge">Completed</div>
+        </div>
+        <button aria-label="More options for payment to IKEA">•••</button>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="account-row">
+        <div>
+          <div><strong>Electricity bill</strong></div>
+          <div class="muted">Due tomorrow</div>
+          <div>-1,290 kr</div>
+          <div class="badge">Overdue soon</div>
+        </div>
+        <button aria-label="More options for Electricity bill">•••</button>
+      </div>
+    </article>
+
+    <div class="notice">
+      <span aria-hidden="true">ℹ️</span>
+      <strong>Card update:</strong> Your new card is on its way.
+    </div>
+  </section>
+
+  <hr>
+  <details>
+    <summary>Facilitator notes</summary>
+    <p><strong>Bad example:</strong> visual title is not a heading, profile icon has no useful name, account content creates many stops, repeated “More” labels lack context, status “!” is visually dependent, decorative icon is exposed.</p>
+    <p><strong>Improved example:</strong> semantic headings, contextual button names, decorative icon hidden, richer account summary, meaningful status text.</p>
+  </details>
+</main>
+
+<script>
+const badTab = document.getElementById('badTab');
+const goodTab = document.getElementById('goodTab');
+const bad = document.getElementById('badVersion');
+const good = document.getElementById('goodVersion');
+const visualTitle = document.getElementById('visualTitle');
+const profileBtn = document.getElementById('profileBtn');
+
+profileBtn.removeAttribute('aria-label');
+
+function setMode(mode) {
+  const isBad = mode === 'bad';
+  bad.classList.toggle('hidden', !isBad);
+  good.classList.toggle('hidden', isBad);
+  badTab.setAttribute('aria-pressed', String(isBad));
+  goodTab.setAttribute('aria-pressed', String(!isBad));
+  visualTitle.classList.toggle('hidden', !isBad);
+  profileBtn.classList.toggle('hidden', !isBad);
+}
+badTab.addEventListener('click', () => setMode('bad'));
+goodTab.addEventListener('click', () => setMode('good'));
+</script>
+</body>
+</html>
