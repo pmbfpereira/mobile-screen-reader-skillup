@@ -226,7 +226,7 @@ hr {
 
     <h2>Your accounts</h2>
 
-    <article class="card" tabindex="0"
+    <div class="card" tabindex="0"
       aria-label="Everyday account, account ending 1234, balance 12,450 kroner">
       <div class="account-row" aria-hidden="true">
         <div>
@@ -235,9 +235,9 @@ hr {
         </div>
         <div class="amount">12,450 kr</div>
       </div>
-    </article>
+    </div>
 
-    <article class="card" tabindex="0"
+    <div class="card" tabindex="0"
       aria-label="Savings, account ending 9876, balance 80,000 kroner">
       <div class="account-row" aria-hidden="true">
         <div>
@@ -246,11 +246,11 @@ hr {
         </div>
         <div class="amount">80,000 kr</div>
       </div>
-    </article>
+    </div>
 
     <h2>Recent activity</h2>
 
-    <article class="card">
+    <div class="card">
       <div class="account-row">
         <div>
           <div><strong>IKEA</strong></div>
@@ -260,9 +260,9 @@ hr {
         </div>
         <button aria-label="More options for payment to IKEA">•••</button>
       </div>
-    </article>
+    </div>
 
-    <article class="card">
+    <div class="card">
       <div class="account-row">
         <div>
           <div><strong>Electricity bill</strong></div>
@@ -272,22 +272,22 @@ hr {
         </div>
         <button aria-label="More options for Electricity bill">•••</button>
       </div>
-    </article>
+    </div>
 
     <div class="notice">
       <span aria-hidden="true">ℹ️</span>
       <strong>Card update:</strong> Your new card is on its way.
     </div>
   </section>
-
-  <hr>
+<!--
+  <hr aria-hidden="true">
   <details>
     <summary>Facilitator notes</summary>
     <p><strong>Bad example:</strong> visual title is not a heading, profile icon has no useful name, account content creates many stops, repeated “More” labels lack context, status “!” is visually dependent, decorative icon is exposed.</p>
     <p><strong>Improved example:</strong> semantic headings, contextual button names, decorative icon hidden, richer account summary, meaningful status text.</p>
   </details>
+-->
 </main>
-
 <script>
 const badTab = document.getElementById('badTab');
 const goodTab = document.getElementById('goodTab');
