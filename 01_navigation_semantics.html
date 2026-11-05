@@ -22,13 +22,6 @@ body {
   background: white;
   padding: 20px 18px 48px;
 }
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 18px;
-}
 h1, h2, h3 { margin: 0; }
 h1 { font-size: 1.75rem; line-height: 1.2; }
 h2 { font-size: 1.15rem; margin-top: 28px; margin-bottom: 10px; }
@@ -155,16 +148,14 @@ hr {
 </head>
 <body>
 <main class="app">
+
   <div class="tabs" aria-label="Demo mode">
     <button id="badTab" aria-pressed="true">Bad example</button>
     <button id="goodTab" aria-pressed="false">Improved example</button>
   </div>
 
-  <p class="demo-note">
-    Try navigating with VoiceOver or TalkBack before switching versions. Notice what gets announced, in what order, and whether controls make sense without looking.
-  </p>
-
   <section id="badVersion">
+    <div style="font-size: 1.75rem; line-height: 1.2;font-weight: bold;">Accounts</div>
     <div style="font-size:1.15rem;font-weight:700;margin-top:28px;margin-bottom:10px">Your accounts</div>
 
     <div class="card">
@@ -285,10 +276,6 @@ const badTab = document.getElementById('badTab');
 const goodTab = document.getElementById('goodTab');
 const bad = document.getElementById('badVersion');
 const good = document.getElementById('goodVersion');
-const visualTitle = document.getElementById('visualTitle');
-const profileBtn = document.getElementById('profileBtn');
-
-profileBtn.removeAttribute('aria-label');
 
 function setMode(mode) {
   const isBad = mode === 'bad';
@@ -296,8 +283,6 @@ function setMode(mode) {
   good.classList.toggle('hidden', isBad);
   badTab.setAttribute('aria-pressed', String(isBad));
   goodTab.setAttribute('aria-pressed', String(!isBad));
-  visualTitle.classList.toggle('hidden', !isBad);
-  profileBtn.classList.toggle('hidden', !isBad);
 }
 badTab.addEventListener('click', () => setMode('bad'));
 goodTab.addEventListener('click', () => setMode('good'));
